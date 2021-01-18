@@ -27,6 +27,10 @@ final class HereFactory extends AbstractFactory
     {
         $httplug = $config['httplug_client'] ?: $this->httpClient ?? HttpClientDiscovery::find();
 
+        if (!empty($config['app_key'])) {
+            return Here::createUsingApiKey($httplug, $config['app_key'], $config['use_cit']);
+        }
+        
         return new Here($httplug, $config['app_id'], $config['app_code'], $config['use_cit']);
     }
 
@@ -39,6 +43,6 @@ final class HereFactory extends AbstractFactory
 
         $resolver->setAllowedTypes('httplug_client', ['object', 'null']);
         $resolver->setAllowedTypes('use_cit', ['bool', 'false']);
-        $resolver->setRequired(['app_id', 'app_code']);
+        $resolver->setRequired(['app_id', 'app_code', 'app_key]);
     }
 }
